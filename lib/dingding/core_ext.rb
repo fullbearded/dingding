@@ -3,7 +3,7 @@ begin
 rescue LoadError
   class String
     def constantize
-      names = self.split('::')
+      names = split('::')
       names.shift if names.empty? || names.first.empty?
 
       constant = Object
@@ -12,7 +12,7 @@ rescue LoadError
       end
       constant
     end
-  end if !''.respond_to?(:constantize)
+  end unless ''.respond_to?(:constantize)
 end
 
 begin
@@ -22,9 +22,13 @@ rescue LoadError
   class Hash
     def symbolize_keys
       keys.each do |key|
-        self[(key.to_sym rescue key) || key] = delete(key)
+        self[(begin
+                key.to_sym
+              rescue
+                key
+              end) || key] = delete(key)
       end
       self
-    end if !{}.respond_to?(:symbolize_keys)
+    end unless {}.respond_to?(:symbolize_keys)
   end
 end

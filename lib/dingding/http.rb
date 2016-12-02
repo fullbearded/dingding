@@ -32,6 +32,5 @@ module Dingding
         get Dingding.request_uri(path), query: parameters
       end
     end
-
   end
 end

@@ -4,23 +4,23 @@ module Dingding
 
     REQUEST_OPTIONS_KEYS = [:corp_id, :corp_secret].freeze
     TOKEN_PATH = '/gettoken'.freeze
-    ERROR_CODE_FOR_INVALID_ACCESS_TOKEN = 40014.freeze
+    ERROR_CODE_FOR_INVALID_ACCESS_TOKEN = 40_014
 
     def initialize
       @setting = Dingding.config.to_hash
       REQUEST_OPTIONS_KEYS.each do |opt|
-        raise MissingArgsError, [opt] unless setting.has_key?(opt)
+        raise MissingArgsError, [opt] unless setting.key?(opt)
         raise InvalidArgsError, [opt] if setting[opt].nil?
         instance_variable_set("@#{opt}".to_sym, setting[opt])
       end
     end
 
     def token
-      @@access_token ||= get_token
+      @@access_token ||= generate_token
     end
 
     def regenerate_token
-      @@access_token = get_token
+      @@access_token = generate_token
     end
 
     def request_for
@@ -42,7 +42,7 @@ module Dingding
 
     private
 
-    def get_token
+    def generate_token
       Http.get(File.join(API_URL, TOKEN_PATH), query: {corpid: corp_id, corpsecret: corp_secret})[:access_token]
     end
 
