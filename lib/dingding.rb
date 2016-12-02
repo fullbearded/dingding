@@ -3,6 +3,7 @@ require 'forwardable'
 require 'dry-configurable'
 require 'httparty'
 
+require 'dingding/message_body'
 require 'dingding/core_ext'
 require 'dingding/exceptions'
 require 'dingding/client'
@@ -15,9 +16,11 @@ module Dingding
   setting :corp_id, nil
   setting :corp_secret, nil
   setting :debug, false
+  setting :cache_store, :class
 
   autoload :Http, 'dingding/http'
   autoload :Chat, 'dingding/api/chat'
+  autoload :Message, 'dingding/api/message'
 
   class << self
     extend Forwardable

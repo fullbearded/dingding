@@ -3,9 +3,9 @@
 
 module Dingding
   class Chat
-    class << self
-      MESSAGE_TYPE = %i(text file link image voice oa).freeze
+    extend Dingding::MessageBody
 
+    class << self
       CREATE_PATH = '/chat/create'.freeze
       SEND_PATH   = '/chat/send'.freeze
       GET_PATH    = '/chat/get'.freeze
@@ -43,11 +43,6 @@ module Dingding
         Http.dpost SEND_PATH, {chatid: chatid, sender: sender}.merge(send("content_for_#{type}".to_sym, opts))
       end
 
-      MESSAGE_TYPE.each do |type|
-        define_method "content_for_#{type}" do |opts|
-          {msgtype: type, type => opts}
-        end
-      end
     end
   end
 end
